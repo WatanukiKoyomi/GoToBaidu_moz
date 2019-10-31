@@ -25,12 +25,12 @@
     [
         {
             "matches": ["http://www.baidu.com/*","https://www.baidu.com/*"],
-            // "css":["css/1.css"],
+            "css":["css/1.css"],
             "js":["js/inject.js"],
             "run_at": "document_start"
         }
     ],
     "permissions": [
-        "tabs","contextMenus","http://*/*","https://*/*"
+        "tabs","contextMenus","http://*/*","https://*/*","storage"
     ]
 }
