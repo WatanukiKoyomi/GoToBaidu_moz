@@ -8,5 +8,6 @@ function btnClick(){
     bg.userurl = newurl;
     userjson = {userurl: newurl};
     bg.setStorage(userjson);
+    alert("更改成功");
 }
 btn.onclick = btnClick;
