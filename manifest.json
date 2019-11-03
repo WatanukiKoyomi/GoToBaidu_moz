@@ -26,7 +26,6 @@
         {
             "matches": ["http://www.baidu.com/*","https://www.baidu.com/*"],
             "css":["css/1.css"],
-            "js":["js/content-script.js"],
             "run_at": "document_start"
         }
     ],
