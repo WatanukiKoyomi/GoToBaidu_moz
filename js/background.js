@@ -3,10 +3,11 @@ var userurl = browser.storage.local.get("userjson").userurl;
 if(userurl == null || userurl == ''){
     userurl = 'https://s2.ax1x.com/2019/10/28/K6x46x.png';
 }
+//onResponseStarted和onCompleted拦截的地址
+var target_1 = "https://www.baidu.com/";
+var target_2 = "https://www.baidu.com/index.php*";
 
-var target = "https://www.baidu.com/";
-
-//插入背景图片的css方法
+//插入背景图片的css监听器方法
 function backImgListener(details){
     console.log("onCompleted details.url: "+ details.url);
     console.log("onCompleted details.statusCode: "+ details.statusCode);
@@ -14,7 +15,8 @@ function backImgListener(details){
     browser.tabs.insertCSS({code: newurl});
 }
 //请求完成监听,用来插入背景css
-browser.webRequest.onCompleted.addListener(backImgListener,{urls: [target]});
+browser.webRequest.onResponseStarted.addListener(backImgListener,{urls: [target_1,target_2]});
+browser.webRequest.onCompleted.addListener(backImgListener,{urls: [target_1,target_2]});
 
 //browserAction的右键菜单
 browser.contextMenus.create({
@@ -41,9 +43,11 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
         console.log("checkedState状态:"+ info.checked);
         console.log("wasChecked:"+ info.wasChecked);
         if(info.wasChecked){
-            browser.webRequest.onCompleted.addListener(backImgListener,{urls: [target]});
+            browser.webRequest.onCompleted.addListener(backImgListener,{urls: [target_1,target_2]});
+            browser.webRequest.onResponseStarted.addListener(backImgListener,{urls: [target_1,target_2]});
         }else{
             browser.webRequest.onCompleted.removeListener(backImgListener);
+            browser.webRequest.onResponseStarted.removeListener(backImgListener);
         }
     }
 });
@@ -79,14 +83,14 @@ browser.browserAction.onClicked.addListener(function(tab){
 // });
 
 //运行时短消息监听，监听contentScript发来的消息
-function handleMessage(request, sender, sendResponse) {
-    console.log("Message from the content script: "+request.greeting);
-    var newurl = "body {background-image: url("+userurl+") !important;";
-    browser.tabs.insertCSS({code: newurl});
-    sendResponse({response: "Response from background script"});
-}
+// function handleMessage(request, sender, sendResponse) {
+//     console.log("Message from the content script: "+request.greeting);
+//     var newurl = "body {background-image: url("+userurl+") !important;";
+//     browser.tabs.insertCSS({code: newurl});
+//     sendResponse({response: "Response from background script"});
+// }
 
-browser.runtime.onMessage.addListener(handleMessage);
+// browser.runtime.onMessage.addListener(handleMessage);
 
 //供popup调用的本地存储方法
 function setStorage(userjson){
